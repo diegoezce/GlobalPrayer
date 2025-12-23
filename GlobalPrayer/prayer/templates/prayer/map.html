@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Global Prayer Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet/dist/leaflet.css"
@@ -82,6 +83,45 @@
             font-size: 20px;
             cursor: pointer;
         }
+    /* ===== Mobile popup override ===== */
+    @media (max-width: 600px) {
+
+        /* Contenedor del popup de Leaflet */
+        .leaflet-popup-content-wrapper {
+            border-radius: 12px;
+        }
+
+        .leaflet-popup-content {
+            font-size: 20px !important;
+            min-width: 300px !important;
+            max-width: 90vw !important;
+            padding: 16px !important;
+        }
+
+        .popup-content {
+            padding: 16px;
+            font-size: 18px;
+        }
+
+        .popup-content p {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .pray-btn,
+        #closePopup {
+            font-size: 18px;
+            padding: 14px;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .close-x {
+            font-size: 26px;
+            top: 6px;
+            right: 8px;
+        }
+    }
     </style>
 </head>
 <body>
@@ -139,7 +179,9 @@
             </div>
             `;
 
-            buttonEl.parentNode.appendChild(msg);
+             // Agregar el popup al contenedor principal del mapa
+    
+            buttonEl.closest(".leaflet-popup-content").appendChild(msg);
 
             // Manejar el cierre del popup
               // Manejar el cierre del popup
