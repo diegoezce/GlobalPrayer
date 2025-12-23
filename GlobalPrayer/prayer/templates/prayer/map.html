@@ -154,49 +154,30 @@
         }
     }
 
-    /* ===== Welcome modal ===== */
-#welcome-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
+    /* ===== Welcome & Legend overlays unified ===== */
+#welcome-overlay,
+#legend-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
 }
 
-#welcome-modal {
-        background: white;
-        max-width: 420px;
-        width: 90%;
-        padding: 24px;
-        border-radius: 12px;
-        text-align: center;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+#legend-overlay {
+    display: none;
 }
 
-#welcome-modal h3 {
-        margin-top: 0;
-        font-size: 20px;
-        font-weight: 600;
-}
-
-#welcome-modal p {
-        font-size: 15px;
-        line-height: 1.5;
-        margin: 12px 0;
-}
-
-#welcome-modal button {
-        margin-top: 16px;
-        padding: 12px;
-        width: 100%;
-        font-size: 16px;
-        background: #2e7d32;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
+.welcome-modal {
+    background: white;
+    max-width: 420px;
+    width: 90%;
+    padding: 24px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
 }
 #menu-btn {
     position: fixed;
@@ -246,14 +227,76 @@
     display: flex;
     justify-content: space-between;
 }
+
+/* ===== Verse styling ===== */
+.verse {
+    margin: 8px 16px 12px;
+    font-size: 14px;
+    font-style: italic;
+    color: #444;
+    text-align: center;
+}
+
+.verse span {
+    display: block;
+    margin-top: 4px;
+    font-size: 13px;
+    font-style: normal;
+    color: #666;
+}
+
+@media (max-width: 600px) {
+    .verse {
+        font-size: 15px;
+    }
+}
+
+/* ===== Help button styling ===== */
+#about-btn, #legend-btn {
+    position: fixed;
+    top: 12px;
+    z-index: 9000;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+}
+
+#about-btn {
+    right: 64px;
+}
+
+#legend-btn {
+    right: 108px;
+}
     </style>
 </head>
 <body>
 
 <button id="menu-btn">📊</button>
+<button id="about-btn">ℹ️</button>
+<button id="legend-btn">🎨</button>
+
+<div id="legend-overlay">
+    <div class="welcome-modal">
+        <h3>🎨 Map Legend</h3>
+
+        <p><span style="color:#ff4d4d;font-weight:600;">●</span> Needs prayer</p>
+        <p><span style="color:#ffd633;font-weight:600;">●</span> Growing prayer</p>
+        <p><span style="color:#66cc66;font-weight:600;">●</span> Much prayer</p>
+        <p><span style="color:#ccc;font-weight:600;">●</span> No data yet</p>
+
+        <button id="legend-close">Close</button>
+    </div>
+</div>
 
 <div id="welcome-overlay">
-    <div id="welcome-modal">
+    <div class="welcome-modal">
         <h3>🌍 Global Prayer</h3>
 
         <p>
@@ -271,6 +314,12 @@
 </div>
 
 <h2>🌍 Global Prayer</h2>
+
+<p class="verse">
+    “The prayers of the saints rose before God like incense.”<br/>
+    <span>— Revelation 8:4</span>
+</p>
+
 <p>Tap a country • Pray 🙏</p>
 
 <div id="rankings-overlay" style="display:none;">
@@ -447,14 +496,36 @@
                 }
             }).addTo(map);
         });
-    document.addEventListener("DOMContentLoaded", function () {
-        const overlay = document.getElementById("welcome-overlay");
-        const closeBtn = document.getElementById("welcome-close");
+document.addEventListener("DOMContentLoaded", function () {
+    const welcomeOverlay = document.getElementById("welcome-overlay");
+    const welcomeClose = document.getElementById("welcome-close");
+    const aboutBtn = document.getElementById("about-btn");
 
-        closeBtn.addEventListener("click", function () {
-            overlay.remove();
-        });
+    const legendOverlay = document.getElementById("legend-overlay");
+    const legendClose = document.getElementById("legend-close");
+    const legendBtn = document.getElementById("legend-btn");
+
+    if (localStorage.getItem("welcomeSeen") === "true") {
+        welcomeOverlay.style.display = "none";
+    }
+
+    welcomeClose.addEventListener("click", function () {
+        localStorage.setItem("welcomeSeen", "true");
+        welcomeOverlay.style.display = "none";
     });
+
+    aboutBtn.addEventListener("click", function () {
+        welcomeOverlay.style.display = "flex";
+    });
+
+    legendBtn.addEventListener("click", function () {
+        legendOverlay.style.display = "flex";
+    });
+
+    legendClose.addEventListener("click", function () {
+        legendOverlay.style.display = "none";
+    });
+});
 
 document.getElementById("menu-btn").addEventListener("click", () => {
     const overlay = document.getElementById("rankings-overlay");
