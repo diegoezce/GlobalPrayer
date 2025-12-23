@@ -3,12 +3,22 @@
 <head>
     <title>Global Prayer Map</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link
       rel="stylesheet"
       href="https://unpkg.com/leaflet/dist/leaflet.css"
     />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+                         Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', Arial,
+                         sans-serif;
+            margin: 0;
+            padding: 0;
+        }
         #map {
             height: 90vh;
         }
@@ -147,8 +157,8 @@
 </head>
 <body>
 
-<h2>Orá por las naciones</h2>
-<p>Los colores muestran cuánta oración recibe cada país.</p>
+<h2>🌍 Global Prayer</h2>
+<p>Tap a country • Pray 🙏</p>
 
 <div id="map"></div>
 
@@ -195,8 +205,8 @@
             msg.innerHTML = `
             <div class="popup-content">
                 <button class="close-x">&times;</button> <!-- Botón de cerrar en la esquina -->
-                <p>🙏 Oración registrada por ${data.name}</p>
-                <button id="closePopup">Cerrar</button>
+                <p>🙏 Thank you</p>
+                <button id="closePopup">Close</button>
             </div>
             `;
 
@@ -266,11 +276,11 @@
 
                     layer.bindPopup(`
                         <strong>${countryName}</strong><br/>
-                        ${count !== undefined ? 'Oraciones: ' + count : 'Sin oraciones aún'}<br/><br/>
+                        ${count !== undefined ? 'Prayers: ' + count : 'No prayers yet'}<br/><br/>
                         <button class="pray-btn"
                                 data-iso="${iso3}"
                                 data-name="${encodeURIComponent(countryName)}">
-                            Me comprometo a orar 🙏
+                            🙏 Pray
                         </button>
                     `);
 
@@ -312,3 +322,7 @@
 
 </body>
 </html>
+        h2 {
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
