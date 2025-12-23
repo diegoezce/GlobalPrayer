@@ -13,10 +13,33 @@ def world_map(request):
 @csrf_exempt
 @require_POST
 def pray_for_country(request, iso3):
-    try:
-        country = Country.objects.get(iso_code=iso3.upper())
-        country.prayer_count += 1
-        country.save()
-        return JsonResponse({"ok": True, "iso": iso3})
-    except Country.DoesNotExist:
-        return JsonResponse({"ok": False, "error": "Country not found"}, status=404)
+    iso3 = iso3.upper()
+
+    country_name = iso3
+
+    if request.body:
+        try:
+            import json
+            body = json.loads(request.body.decode("utf-8"))
+            country_name = body.get("name", iso3)
+        except Exception:
+            pass
+
+    country, created = Country.objects.get_or_create(
+        iso_code=iso3,
+        defaults={
+            "name": country_name,
+            "prayer_count": 0,
+        }
+    )
+
+    country.prayer_count += 1
+    country.save()
+
+    return JsonResponse({
+        "ok": True,
+        "iso": iso3,
+        "name": country.name,
+        "created": created,
+        "prayer_count": country.prayer_count
+    })

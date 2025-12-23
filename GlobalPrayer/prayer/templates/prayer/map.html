@@ -8,7 +8,80 @@
     />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <style>
-        #map { height: 90vh; }
+        #map {
+            height: 90vh;
+        }
+
+        /* Popup base */
+        .leaflet-popup-content {
+            font-size: 16px;
+            line-height: 1.4;
+            min-width: 220px;
+        }
+
+        .pray-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .pray-btn:active {
+            background-color: #1b5e20;
+        }
+
+        .pray-success {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f5e9;
+            color: #1b5e20;
+            border-radius: 6px;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        /* Mobile tweaks */
+        @media (max-width: 600px) {
+            h2 {
+                font-size: 20px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+
+            .leaflet-popup-content {
+                font-size: 18px;
+                min-width: 260px;
+            }
+
+            .pray-btn {
+                font-size: 18px;
+                padding: 14px;
+            }
+        }
+        .popup-content {
+            position: relative;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .popup-content .close-x {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -40,21 +113,56 @@
         return '#66cc66';                    // verde
     }
 
-    function prayForCountry(iso3) {
+    function prayForCountry(iso3, name, buttonEl) {
+        buttonEl.disabled = true;
+        //buttonEl.innerText = "Gracias 🙏";
+
         fetch(`/pray/${iso3}/`, {
             method: "POST",
             headers: {
                 "X-CSRFToken": "{{ csrf_token }}",
                 "Content-Type": "application/json"
-            }
+            },
+            body: JSON.stringify({
+                name: name
+            })
         })
         .then(res => res.json())
         .then(data => {
-            alert("🙏 Gracias por orar por " + iso3);
-            location.reload();
+            const msg = document.createElement("div");
+            msg.className = "pray-success";
+            msg.innerHTML = `
+            <div class="popup-content">
+                <button class="close-x">&times;</button> <!-- Botón de cerrar en la esquina -->
+                <p>🙏 Oración registrada por ${data.name}</p>
+                <button id="closePopup">Cerrar</button>
+            </div>
+            `;
+
+            buttonEl.parentNode.appendChild(msg);
+
+            // Manejar el cierre del popup
+              // Manejar el cierre del popup
+            const closePopup = document.getElementById("closePopup");
+            closePopup.addEventListener("click", () => {
+                msg.remove(); // Eliminar el popup
+                location.reload(); // Recargar la página
+            });
+
+             // Manejar el cierre del popup con la "X" en la esquina
+            const closeX = msg.querySelector(".close-x");
+            closeX.addEventListener("click", () => {
+                msg.remove(); // Eliminar el popup
+                location.reload(); // Recargar la página
+            });
+
+         /*    setTimeout(() => {
+                location.reload();
+            }, 1200); */
         });
     }
 
+    
     // Cargar países y pintarlos
     fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
         .then(res => res.json())
@@ -75,14 +183,34 @@
                 onEachFeature: function (feature, layer) {
                     const iso3 = feature.id;
                     const count = countryData[iso3];
+                    const countryName =
+                        feature.properties.name ||
+                        feature.properties.NAME ||
+                        feature.properties.ADMIN ||
+                        iso3;
 
                     layer.bindPopup(`
-                        <strong>${iso3}</strong><br/>
+                        <strong>${countryName}</strong><br/>
                         ${count !== undefined ? 'Oraciones: ' + count : 'Sin oraciones aún'}<br/><br/>
-                        <button onclick="prayForCountry('${iso3}')">
+                        <button class="pray-btn"
+                                data-iso="${iso3}"
+                                data-name="${encodeURIComponent(countryName)}">
                             Me comprometo a orar 🙏
                         </button>
                     `);
+
+                    layer.on("popupopen", function (e) {
+                        const btn = e.popup._contentNode.querySelector(".pray-btn");
+                        if (btn) {
+                            btn.addEventListener("click", function () {
+                                prayForCountry(
+                                    this.dataset.iso,
+                                    decodeURIComponent(this.dataset.name),
+                                    this
+                                );
+                            });
+                        }
+                    });
                 }
             }).addTo(map);
         });
