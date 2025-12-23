@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Global Prayer Map</title>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet/dist/leaflet.css"
+    />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <style>
+        #map { height: 90vh; }
+    </style>
+</head>
+<body>
+
+<h2>Orá por las naciones</h2>
+<p>Los colores muestran cuánta oración recibe cada país.</p>
+
+<div id="map"></div>
+
+<script>
+    // Inicializar mapa
+    var map = L.map('map').setView([20, 0], 2);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap'
+    }).addTo(map);
+
+    // Datos desde Django
+    const countryData = {
+        {% for c in countries %}
+            "{{ c.iso_code }}": {{ c.prayer_count }},
+        {% endfor %}
+    };
+
+    function getColor(count) {
+        if (count === undefined) return '#ccc';
+        if (count < 5) return '#ff4d4d';     // rojo
+        if (count < 20) return '#ffd633';    // amarillo
+        return '#66cc66';                    // verde
+    }
+
+    function prayForCountry(iso3) {
+        fetch(`/pray/${iso3}/`, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": "{{ csrf_token }}",
+                "Content-Type": "application/json"
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            alert("🙏 Gracias por orar por " + iso3);
+            location.reload();
+        });
+    }
+
+    // Cargar países y pintarlos
+    fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
+        .then(res => res.json())
+        .then(data => {
+            L.geoJson(data, {
+                style: function (feature) {
+                    const iso3 = feature.id; // ISO-3 real del GeoJSON (ARG, USA, etc.)
+                    const count = countryData[iso3];
+
+                    return {
+                        fillColor: getColor(count),
+                        weight: 1,
+                        opacity: 1,
+                        color: '#333',
+                        fillOpacity: 0.7
+                    };
+                },
+                onEachFeature: function (feature, layer) {
+                    const iso3 = feature.id;
+                    const count = countryData[iso3];
+
+                    layer.bindPopup(`
+                        <strong>${iso3}</strong><br/>
+                        ${count !== undefined ? 'Oraciones: ' + count : 'Sin oraciones aún'}<br/><br/>
+                        <button onclick="prayForCountry('${iso3}')">
+                            Me comprometo a orar 🙏
+                        </button>
+                    `);
+                }
+            }).addTo(map);
+        });
+</script>
+
+</body>
+</html>
