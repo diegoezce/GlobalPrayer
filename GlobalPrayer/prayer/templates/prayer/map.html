@@ -252,7 +252,8 @@
 }
 
 /* ===== Help button styling ===== */
-#about-btn, #legend-btn {
+/* ===== Help button styling ===== */
+#about-btn, #legend-btn, #board-btn {
     position: fixed;
     top: 12px;
     z-index: 9000;
@@ -274,6 +275,10 @@
 #legend-btn {
     right: 108px;
 }
+
+#board-btn {
+    right: 152px;
+}
     </style>
 </head>
 <body>
@@ -281,6 +286,7 @@
 <button id="menu-btn">📊</button>
 <button id="about-btn">ℹ️</button>
 <button id="legend-btn">🎨</button>
+<button id="board-btn">🙏</button>
 
 <div id="legend-overlay">
     <div class="welcome-modal">
@@ -535,6 +541,11 @@ document.getElementById("menu-btn").addEventListener("click", () => {
 
 document.getElementById("rankings-close").addEventListener("click", () => {
     document.getElementById("rankings-overlay").style.display = "none";
+});
+
+// Prayer board button navigation
+document.getElementById("board-btn").addEventListener("click", () => {
+    window.location.href = "/prayer-board/add-family-group/";
 });
 </script>
 
