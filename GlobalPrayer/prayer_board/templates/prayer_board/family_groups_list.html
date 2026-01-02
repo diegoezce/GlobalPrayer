@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Groups</title>
+</head>
+<body>
+    <h1>Family Groups</h1>
+    <ul>
+        {% for group in family_groups %}
+            <li>
+                <strong>{{ group.name }}</strong><br>
+                {{ group.description }}<br>
+                <small>Created on {{ group.created_at }}</small>
+            </li>
+        {% empty %}
+            <li>No family groups yet.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_family_group' %}">Add a Family Group</a>
+</body>
+</html>

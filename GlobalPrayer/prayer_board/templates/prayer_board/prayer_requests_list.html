@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Requests for {{ family_group.name }}</title>
+</head>
+<body>
+    <h1>Prayer Requests for {{ family_group.name }}</h1>
+    <ul>
+        {% for request in prayer_requests %}
+            <li>
+                <strong>{{ request.title }}</strong><br>
+                {{ request.description }}<br>
+                <small>Added on {{ request.created_at }}</small>
+            </li>
+        {% empty %}
+            <li>No prayer requests yet.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'add_prayer_request' family_group.id %}">Add a Prayer Request</a>
+</body>
+</html>

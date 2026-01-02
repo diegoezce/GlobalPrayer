@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Prayer Request</title>
+</head>
+<body>
+    <h1>Add a Prayer Request for {{ family_group.name }}</h1>
+    <form method="POST">
+        {% csrf_token %}
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br><br>
+        <label for="description">Description:</label><br>
+        <textarea id="description" name="description" required></textarea><br><br>
+        <button type="submit">Submit</button>
+    </form>
+    <a href="{% url 'prayer_requests_list' family_group.id %}">Back to Prayer Requests</a>
+</body>
+</html>

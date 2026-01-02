@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "prayer", 
+    "prayer",  # Your existing app
+    "prayer_board",  # New app for the praying board
 ]
 
 MIDDLEWARE = [
