@@ -39,3 +39,7 @@ def family_groups_list(request):
     return render(request, 'prayer_board/family_groups_list.html', {
         'family_groups': family_groups,
     })
+
+
+def prayer_board_landing(request):
+    return render(request, "prayer_board/landing.html")

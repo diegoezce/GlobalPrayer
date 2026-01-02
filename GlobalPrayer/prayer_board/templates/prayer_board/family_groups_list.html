@@ -3,21 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Family Groups</title>
+    <title>Family Groups – Global Prayer</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #1f3c88, #2a5298);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 2.4rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 48px;
+        }
+
+        .groups {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 24px;
+        }
+
+        .group-card {
+            background: rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(6px);
+        }
+
+        .group-card h3 {
+            margin-top: 0;
+            margin-bottom: 8px;
+            font-size: 1.3rem;
+        }
+
+        .group-card p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            margin-bottom: 12px;
+        }
+
+        .group-card small {
+            opacity: 0.8;
+        }
+
+        .actions {
+            margin-top: 16px;
+        }
+
+        .actions a {
+            display: inline-block;
+            margin-right: 12px;
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 56px;
+        }
+
+        .btn {
+            padding: 14px 22px;
+            border-radius: 999px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            background: #ffffff;
+            color: #1f3c88;
+        }
+    </style>
 </head>
 <body>
-    <h1>Family Groups</h1>
-    <ul>
-        {% for group in family_groups %}
-            <li>
-                <strong>{{ group.name }}</strong><br>
-                {{ group.description }}<br>
-                <small>Created on {{ group.created_at }}</small>
-            </li>
-        {% empty %}
-            <li>No family groups yet.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'add_family_group' %}">Add a Family Group</a>
+
+<div class="container">
+    <h1>🙏 Family & Prayer Groups</h1>
+    <p class="subtitle">
+        Choose a group to pray together or create a new one.
+    </p>
+
+    {% if family_groups %}
+        <div class="groups">
+            {% for group in family_groups %}
+                <div class="group-card">
+                    <h3>{{ group.name }}</h3>
+                    <p>{{ group.description }}</p>
+                    <small>Created on {{ group.created_at|date:"F j, Y" }}</small>
+
+                    <div class="actions">
+                        <a href="{% url 'prayer_requests_list' group.id %}">
+                            View Prayer Requests →
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align:center; opacity:0.9;">
+            No family groups yet.
+        </p>
+    {% endif %}
+
+    <div class="cta">
+        <a href="{% url 'add_family_group' %}" class="btn">
+            + Create a New Group
+        </a>
+    </div>
+</div>
+
 </body>
 </html>

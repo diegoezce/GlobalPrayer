@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prayer Board – Global Prayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #1f3c88, #2a5298);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 24px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 48px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 24px;
+            margin-bottom: 56px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 28px;
+            backdrop-filter: blur(6px);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            opacity: 0.95;
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 22px;
+            border-radius: 999px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #ffffff;
+            color: #1f3c88;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ffffff;
+            border: 2px solid rgba(255,255,255,0.6);
+        }
+
+        footer {
+            margin-top: 72px;
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Prayer Board</h1>
+
+    <p class="subtitle">
+        A simple space to pray together as families and small groups.
+    </p>
+
+    <div class="cards">
+        <div class="card">
+            <h3>🙏 Create a Family or Group</h3>
+            <p>
+                Start a private prayer board for your family, small group, or friends.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>📖 Share Prayer Requests</h3>
+            <p>
+                Add prayer requests and keep them visible as a reminder to pray.
+            </p>
+        </div>
+
+        <div class="card">
+            <h3>🤝 Pray Together</h3>
+            <p>
+                Strengthen unity by praying regularly for one another.
+            </p>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="/prayer-board/add-family-group/" class="btn btn-primary">
+            Create a Prayer Group
+        </a>
+
+        <a href="/prayer-board/family-groups/" class="btn btn-secondary">
+            View Existing Groups
+        </a>
+    </div>
+
+    <footer>
+        Global Prayer · Encouraging prayer across families and communities
+    </footer>
+</div>
+
+</body>
+</html>

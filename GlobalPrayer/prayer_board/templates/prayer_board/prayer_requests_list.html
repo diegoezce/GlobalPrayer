@@ -3,21 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prayer Requests for {{ family_group.name }}</title>
+    <title>Prayer Requests – Global Prayer</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #1f3c88, #2a5298);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 24px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 2.4rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            opacity: 0.9;
+            margin-bottom: 48px;
+        }
+
+        .requests {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .request-card {
+            background: rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(6px);
+        }
+
+        .request-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .request-card p {
+            font-size: 0.95rem;
+            opacity: 0.95;
+            margin-bottom: 14px;
+        }
+
+        .request-card small {
+            opacity: 0.8;
+        }
+
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+        }
+
+        .actions a {
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: underline;
+        }
+
+        .cta {
+            text-align: center;
+            margin-top: 56px;
+        }
+
+        .btn {
+            padding: 14px 22px;
+            border-radius: 999px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            background: #ffffff;
+            color: #1f3c88;
+        }
+
+        .back {
+            display: block;
+            text-align: center;
+            margin-top: 28px;
+        }
+
+        .back a {
+            color: #ffffff;
+            text-decoration: underline;
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
-    <h1>Prayer Requests for {{ family_group.name }}</h1>
-    <ul>
-        {% for request in prayer_requests %}
-            <li>
-                <strong>{{ request.title }}</strong><br>
-                {{ request.description }}<br>
-                <small>Added on {{ request.created_at }}</small>
-            </li>
-        {% empty %}
-            <li>No prayer requests yet.</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'add_prayer_request' family_group.id %}">Add a Prayer Request</a>
+
+<div class="container">
+    <h1>🙏 Prayer Requests</h1>
+    <p class="subtitle">
+        For <strong>{{ family_group.name }}</strong>
+    </p>
+
+    {% if prayer_requests %}
+        <div class="requests">
+            {% for request in prayer_requests %}
+                <div class="request-card">
+                    <h3>{{ request.title }}</h3>
+                    <p>{{ request.description }}</p>
+                    <small>Added on {{ request.created_at|date:"F j, Y" }}</small>
+
+                    <div class="actions">
+                        <a href="#">
+                            🙏 Mark as Prayed
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="text-align:center; opacity:0.9;">
+            No prayer requests yet.
+        </p>
+    {% endif %}
+
+    <div class="cta">
+        <a href="{% url 'add_prayer_request' family_group.id %}" class="btn">
+            + Add a Prayer Request
+        </a>
+    </div>
+
+    <div class="back">
+        <a href="{% url 'family_groups_list' %}">
+            ← Back to Family Groups
+        </a>
+    </div>
+</div>
+
 </body>
 </html>
