@@ -342,9 +342,12 @@
     // Inicializar mapa
     var map = L.map('map').setView([20, 0], 2);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap'
-    }).addTo(map);
+    L.tileLayer(
+      'https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',
+      {
+        attribution: '&copy; OpenStreetMap &copy; CARTO'
+      }
+    ).addTo(map);
 
     // Datos desde Django
     const countryData = {
@@ -413,12 +416,6 @@
     }
 
     
-    // Overrides manuales para labels de países grandes cruzando el 180°
-    const labelOverrides = {
-        "USA": [39.8, -98.6],   // Centro continental EEUU
-        "RUS": [61.5, 105.3],   // Siberia central
-        "ARG": [-38.4, -63.6],  // Centro visual de Argentina
-    };
 
     // Cargar países y pintarlos
     fetch('https://raw.githubusercontent.com/johan/world.geo.json/master/countries.geo.json')
@@ -462,24 +459,13 @@
                         </button>
                     `);
 
-                    const override = labelOverrides[iso3];
-
-                    if (override) {
-                        const labelMarker = L.marker(override, {
-                            icon: L.divIcon({
-                                className: "country-label",
-                                html: countryName,
-                            }),
-                            interactive: false
-                        }).addTo(map);
-                    } else {
-                        layer.bindTooltip(countryName, {
-                            permanent: true,
-                            direction: "center",
-                            className: "country-label",
-                            opacity: 0.9
-                        });
-                    }
+                    layer.bindTooltip(countryName, {
+                        permanent: false,
+                        direction: "center",
+                        className: "country-label",
+                        opacity: 0.9,
+                        sticky: true
+                    });
 
                     layer.on("popupopen", function (e) {
                         const btn = e.popup._contentNode.querySelector(".pray-btn");
