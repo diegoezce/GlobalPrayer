@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +26,14 @@ SECRET_KEY = "django-insecure-2)z*#&ws@fq54td(0jj%*dg4cl89-gnfm$j)^j+&s@@y+3eoan
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 ALLOWED_HOSTS = ["*"]
+
+# CSRF settings for Railway / HTTPS
+CSRF_TRUSTED_ORIGINS = os.getenv(
+    "CSRF_TRUSTED_ORIGINS",
+    "https://globalprayer.up.railway.app"
+).split(",")
 
 
 # Application definition
@@ -75,12 +83,26 @@ WSGI_APPLICATION = "GlobalPrayer.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+if os.environ.get("PGHOST"):
+    # Railway / Producción → PostgreSQL
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ.get("PGDATABASE"),
+            "USER": os.environ.get("PGUSER"),
+            "PASSWORD": os.environ.get("PGPASSWORD"),
+            "HOST": os.environ.get("PGHOST"),
+            "PORT": os.environ.get("PGPORT", "5432"),
+        }
     }
-}
+else:
+    # Local → SQLite
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Password validation
