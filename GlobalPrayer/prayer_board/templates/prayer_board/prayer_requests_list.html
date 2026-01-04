@@ -116,6 +116,35 @@
         {% endif %}
     </p>
 
+    <div style="text-align:center; margin-bottom:32px;">
+        <button
+            id="copyLinkBtn"
+            class="btn"
+            onclick="copyGroupLink()"
+            style="background:rgba(255,255,255,0.9); color:#1f3c88;">
+            🔗 Share link
+        </button>
+
+        <a
+            href="https://wa.me/?text=Join%20our%20prayer%20group%0A{{ request.scheme }}://{{ request.get_host }}{% url 'prayer_requests_list' family_group.id %}%20{% if family_group.is_private %}%0A%0AAccess%20code:%0A{{ family_group.access_code }}{% endif %}"
+            target="_blank"
+            class="btn"
+            style="margin-left:12px; background:#25D366; color:#ffffff;">
+            💬 Share on WhatsApp
+        </a>
+
+        <div id="copyFeedback"
+             style="margin-top:10px; font-size:0.85rem; opacity:0.9; display:none;">
+            ✅ Link{% if family_group.is_private %} and code{% endif %} copied to clipboard
+        </div>
+
+        {% if family_group.is_private %}
+            <p style="margin-top:14px; font-size:0.9rem; opacity:0.85;">
+                🔒 Access code: <strong>{{ family_group.access_code }}</strong>
+            </p>
+        {% endif %}
+    </div>
+
     {% if prayer_requests %}
         <div class="requests">
             {% for request in prayer_requests %}
@@ -204,4 +233,21 @@
 </div>
 
 </body>
+<script>
+function copyGroupLink() {
+    let text = "Join our prayer group\n{{ request.scheme }}://{{ request.get_host }}{% url 'prayer_requests_list' family_group.id %}";
+
+    {% if family_group.is_private %}
+        text += "\n\n---\nAccess code:\n{{ family_group.access_code }}";
+    {% endif %}
+
+    navigator.clipboard.writeText(text).then(() => {
+        const feedback = document.getElementById("copyFeedback");
+        feedback.style.display = "block";
+        setTimeout(() => {
+            feedback.style.display = "none";
+        }, 2000);
+    });
+}
+</script>
 </html>
