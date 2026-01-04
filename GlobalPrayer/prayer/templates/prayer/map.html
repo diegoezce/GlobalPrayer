@@ -253,7 +253,7 @@
 
 /* ===== Help button styling ===== */
 /* ===== Help button styling ===== */
-#about-btn, #legend-btn, #board-btn {
+#about-btn, #legend-btn, #board-btn, #contact-btn {
     position: fixed;
     top: 12px;
     z-index: 9000;
@@ -277,7 +277,11 @@
 }
 
 #board-btn {
-    right: 152px;
+    right: 196px;
+}
+
+#contact-btn {
+    right: 240px;
 }
     </style>
 </head>
@@ -287,6 +291,7 @@
 <button id="about-btn">ℹ️</button>
 <button id="legend-btn">🎨</button>
 <button id="board-btn">🙏</button>
+<button id="contact-btn">✉️</button>
 
 <div id="legend-overlay">
     <div class="welcome-modal">
@@ -306,13 +311,13 @@
         <h3>🌍 Global Prayer</h3>
 
         <p>
-            A simple global map where anyone can commit to pray for a country.
-            No registration required. This is between you and God.
+            Pray for a country by tapping on the map.<br>
+            No sign up required.
         </p>
-
-        <p>
-            Un mapa global simple donde cualquier persona puede comprometerse a orar por un país.
-            No se requiere registro. Esto es entre tú y Dios.
+        
+        <p style="font-size:14px; opacity:0.9;">
+            Orá por un país tocando el mapa.<br>
+            No requiere registro.
         </p>
 
         <button id="welcome-close">🙏 Start praying</button>
@@ -326,7 +331,12 @@
     <span>— Revelation 8:4</span>
 </p>
 
-<p>Tap a country • Pray 🙏</p>
+<p style="text-align:center; margin: 4px 16px 8px; font-size:14px; color:#444;">
+    Pray for a country · Tap & pray 🙏<br>
+    <span style="font-size:13px; color:#666;">
+        Orá por un país · Tocá y orá
+    </span>
+</p>
 
 <div id="rankings-overlay" style="display:none;">
     <div id="rankings-modal">
@@ -546,6 +556,10 @@ document.getElementById("rankings-close").addEventListener("click", () => {
 // Prayer board button navigation
 document.getElementById("board-btn").addEventListener("click", () => {
     window.location.href = "/prayer-board/";
+});
+
+document.getElementById("contact-btn").addEventListener("click", () => {
+    window.open("https://forms.gle/MS22ErXvjMqUWt9g9", "_blank");
 });
 </script>
 
