@@ -10,6 +10,9 @@ def world_map(request):
         "countries": countries
     })
 
+def home(request):
+    return render(request, "prayer/home.html")
+
 @csrf_exempt
 @require_POST
 def pray_for_country(request, iso3):
