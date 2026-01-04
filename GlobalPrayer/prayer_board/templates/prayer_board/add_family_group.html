@@ -107,6 +107,29 @@
             <label for="description">Description</label>
             <textarea id="description" name="description"></textarea>
 
+            <label>Privacy</label>
+
+            <div style="margin-bottom:20px;">
+                <label style="font-weight:400;">
+                    <input type="radio" name="is_private" value="false" checked>
+                    🌍 Public – anyone with the link can join
+                </label><br>
+
+                <label style="font-weight:400;">
+                    <input type="radio" name="is_private" value="true">
+                    🔒 Private – only people with a code
+                </label>
+            </div>
+
+            <div id="private-info"
+                 style="display:none; padding:12px; border-radius:10px;
+                        background:rgba(255,255,255,0.08); margin-bottom:20px;">
+                <p style="margin:0; font-size:0.9rem; opacity:0.9;">
+                    A 4-digit code will be generated automatically.<br>
+                    Share it only with your family or group.
+                </p>
+            </div>
+
             <div class="actions">
                 <button type="submit">Create Prayer Group</button>
             </div>
@@ -127,4 +150,14 @@
 </div>
 
 </body>
+<script>
+    const radios = document.querySelectorAll('input[name="is_private"]');
+    const info = document.getElementById('private-info');
+
+    radios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            info.style.display = radio.value === 'true' ? 'block' : 'none';
+        });
+    });
+</script>
 </html>

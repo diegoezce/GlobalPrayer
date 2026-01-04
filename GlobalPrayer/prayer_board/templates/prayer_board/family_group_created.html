@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Group Created – Global Prayer</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, sans-serif;
+            background: linear-gradient(135deg, #1f3c88, #2a5298);
+            color: #ffffff;
+        }
+
+        .container {
+            max-width: 520px;
+            margin: 80px auto;
+            padding: 32px;
+            text-align: center;
+            background: rgba(255,255,255,0.08);
+            border-radius: 16px;
+        }
+
+        .code {
+            font-size: 2.4rem;
+            letter-spacing: 6px;
+            margin: 24px 0;
+            font-weight: 700;
+            color: #b8ffcf;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 24px;
+            padding: 14px 24px;
+            border-radius: 999px;
+            background: #ffffff;
+            color: #1f3c88;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🙏 Prayer Group Created</h2>
+
+    <p><strong>{{ family_group.name }}</strong></p>
+
+    {% if family_group.is_private %}
+        <p>This is a private prayer group.</p>
+        <p>Share this code with your family or group:</p>
+
+        <div class="code">
+            {{ family_group.access_code }}
+        </div>
+    {% else %}
+        <p>This is a public prayer group.</p>
+        <p>Anyone with the link can join.</p>
+    {% endif %}
+
+    <div style="margin-top:32px; padding-top:20px; border-top:1px solid rgba(255,255,255,0.25);">
+
+        <p style="margin-bottom:12px; font-weight:500;">
+            🔗 Share this prayer group
+        </p>
+
+        <input
+            type="text"
+            readonly
+            value="{{ request.scheme }}://{{ request.get_host }}{% url 'prayer_requests_list' family_group.id %}"
+            style="width:100%; padding:10px; border-radius:8px; border:none;
+                   font-size:0.9rem; text-align:center;"
+            onclick="this.select();"
+        />
+
+        {% if family_group.is_private %}
+            <p style="margin-top:12px; font-size:0.9rem; opacity:0.9;">
+                🔒 Access code: <strong>{{ family_group.access_code }}</strong>
+            </p>
+        {% endif %}
+    </div>
+
+    <a href="{% url 'prayer_requests_list' family_group.id %}" class="btn">
+        Go to Prayer Board
+    </a>
+</div>
+
+</body>
+</html>
