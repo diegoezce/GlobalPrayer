@@ -22,3 +22,12 @@ class PrayerRequest(models.Model):
 
     def __str__(self):
         return self.title
+    
+class PrayerComment(models.Model):
+    prayer_request = models.ForeignKey(
+        PrayerRequest,
+        related_name="comments",
+        on_delete=models.CASCADE
+    )
+    text = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)

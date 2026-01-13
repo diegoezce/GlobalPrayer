@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import FamilyGroup, PrayerRequest
+from .models import FamilyGroup, PrayerRequest, PrayerRequest, PrayerComment
 from django.utils import timezone
 import random
 
@@ -130,3 +130,18 @@ def family_groups_list(request):
 
 def prayer_board_landing(request):
     return render(request, "prayer_board/landing.html")
+
+
+
+def add_prayer_comment(request, request_id):
+    prayer_request = get_object_or_404(PrayerRequest, id=request_id)
+
+    if request.method == "POST":
+        text = request.POST.get("text", "").strip()
+        if text:
+            PrayerComment.objects.create(
+                prayer_request=prayer_request,
+                text=text
+            )
+
+    return redirect("prayer_requests_list", prayer_request.family_group.id)

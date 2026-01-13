@@ -16,3 +16,4 @@ class Country(models.Model):
 class PrayerCommitment(models.Model):
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+

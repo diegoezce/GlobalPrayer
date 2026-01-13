@@ -46,3 +46,5 @@ def pray_for_country(request, iso3):
         "created": created,
         "prayer_count": country.prayer_count
     })
+
+

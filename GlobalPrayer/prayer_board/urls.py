@@ -19,4 +19,9 @@ urlpatterns = [
     views.family_group_created,
     name='family_group_created'
     ),
+    path(
+    "prayer-request/<int:request_id>/comment/",
+    views.add_prayer_comment,
+    name="add_prayer_comment"
+    ),
 ]
